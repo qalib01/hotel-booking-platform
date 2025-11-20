@@ -69,7 +69,7 @@ export const Header = () => {
                     <div className="flex items-center gap-3">
                         <Link
                             href="/book"
-                            className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gray-200 text-blue-900 shadow-lg font-bold hover:from-gray-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                            className="flex items-center hidden lg:flex items-center gap-1 justify-center gap-2 px-6 py-2.5 rounded-xl bg-gray-200 text-blue-900 shadow-lg font-bold hover:from-gray-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
                         >
                             <span>Book</span>
                             <ChevronRight className="w-4 h-4" />
@@ -79,7 +79,7 @@ export const Header = () => {
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                             className='lg:hidden p-2 rounded-lg transition-colors text-gray-700 hover:bg-gray-100'
                         >
-                            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                            {isMobileMenuOpen ? <X className="w-6 h-6" color="white" /> : <Menu className="w-6 h-6" color="white" />}
                         </button>
                     </div>
                 </div>
@@ -98,6 +98,13 @@ export const Header = () => {
                                 {item.name}
                             </a>
                         ))}
+                        <Link
+                            href="/book"
+                            className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gray-200 text-blue-900 shadow-lg font-bold hover:from-gray-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                        >
+                            <span>Book</span>
+                            <ChevronRight className="w-4 h-4" />
+                        </Link>
                     </div>
                 </div>
             )}

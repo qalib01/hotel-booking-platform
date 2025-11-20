@@ -1,6 +1,6 @@
-import { BoardType, Country, Hotel, MealType } from "../types/data.type";
+import { IBoardType, ICountry, IHotel, IMealType } from "../types/data.type";
 
-export const countries = [
+export const countries: ICountry[] = [
     {
         id: 1,
         name: "Türkiye",
@@ -16,10 +16,10 @@ export const countries = [
         name: "Italy",
         label: "italy"
     },
-] as Country[];
+];
 
-export const hotels = {
-    Turkey: [
+export const hotels: Record<string, IHotel[]> = {
+    Türkiye: [
         {
             id: 101,
             name: "Hilton Istanbul",
@@ -50,13 +50,9 @@ export const hotels = {
             price: 150,
         },
     ],
-} as {
-    Turkey: Hotel[],
-    UAE: Hotel[],
-    Italy: Hotel[],
 };
 
-export const boardTypes = [
+export const boardTypes: IBoardType[] = [
     {
         code: "FB",
         name: "Full Board",
@@ -69,9 +65,9 @@ export const boardTypes = [
         code: "NB",
         name: "No Board",
     },
-] as BoardType[];
+];
 
-export const mealOptions = {
+export const mealOptions: Record<string, IMealType> = {
     Turkey: {
         dinner: [
             {
@@ -156,8 +152,4 @@ export const mealOptions = {
             },
         ],
     },
-} as {
-    Turkey: MealType,
-    UAE: MealType,
-    Italy: MealType,
 };

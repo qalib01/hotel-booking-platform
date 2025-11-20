@@ -1,27 +1,26 @@
-export interface Country {
+export interface ICountry {
     id: number;
     name: string;
     label: string;
 };
 
-export interface Hotel {
+export interface IHotel {
     id: number;
     name: string;
     price: number;
 };
 
-export interface BoardType {
+export interface IBoardType {
     code: string;
     name: string;
 };
 
-export interface Meal {
+export interface IMeal {
     id: number;
     name: string;
     price: number;
 }
 
-export interface MealType {
-    dinner: Meal[];
-    lunch: Meal[];
+export interface IMealType {
+    [key: string]: IMeal[];
 }

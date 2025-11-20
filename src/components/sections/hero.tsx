@@ -1,6 +1,7 @@
 "use client"
 
 import { countries, hotels } from "@/src/data/data";
+import { IHotel } from "@/src/types/data.type";
 import { Calendar, Hotel, MapPin, Search, Sparkles, Users } from "lucide-react";
 import { useState } from "react";
 
@@ -17,16 +18,15 @@ export const HeroSection = () => {
         hotel: '',
         checkIn: '',
         checkOut: '',
-        guests: 1
+        guests: 1,
     });
 
-    const handleSubmit = (e: SubmitEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('Booking search:', formData);
-        // Handle form submission
     };
 
-    const availableHotels = formData.destination ? hotels[formData.destination] : [];
+    const availableHotels: IHotel[] = formData.destination ? hotels[formData.destination] : [];
 
     return (
         <div className="relative min-h-screen overflow-hidden">
@@ -102,8 +102,6 @@ export const HeroSection = () => {
                             </div>
 
                             <form onSubmit={handleSubmit} className="space-y-6">
-
-                                {/* Destination */}
                                 <div className="relative group">
                                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                                         <MapPin className="w-4 h-4 text-purple-600" />
@@ -122,7 +120,6 @@ export const HeroSection = () => {
                                     </select>
                                 </div>
 
-                                {/* Hotel Selection */}
                                 {formData.destination && (
                                     <div className="relative group animate-fadeInUp">
                                         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
@@ -145,7 +142,6 @@ export const HeroSection = () => {
                                     </div>
                                 )}
 
-                                {/* Check-in & Check-out Dates */}
                                 <div className="grid grid-cols-2 gap-4">
                                     <div className="relative group">
                                         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
@@ -177,7 +173,6 @@ export const HeroSection = () => {
                                     </div>
                                 </div>
 
-                                {/* Guests */}
                                 <div className="relative group">
                                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                                         <Users className="w-4 h-4 text-purple-600" />
@@ -194,7 +189,6 @@ export const HeroSection = () => {
                                     />
                                 </div>
 
-                                {/* Submit Button */}
                                 <button
                                     type="submit"
                                     className="w-full bg-gradient-to-r from-purple-600 via-purple-500 to-pink-500 text-white py-4 rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-600 transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-purple-500/50 flex items-center justify-center gap-3 group relative overflow-hidden"
@@ -207,7 +201,6 @@ export const HeroSection = () => {
                                 </button>
                             </form>
 
-                            {/* Trust Indicators */}
                             <div className="mt-6 pt-6 border-t border-gray-200">
                                 <div className="flex items-center justify-center gap-6 text-sm text-gray-600">
                                     <div className="flex items-center gap-2">
@@ -226,7 +219,6 @@ export const HeroSection = () => {
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
                 <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
                     <div className="w-1.5 h-3 bg-white rounded-full"></div>
