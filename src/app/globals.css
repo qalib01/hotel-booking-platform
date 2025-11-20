@@ -25,6 +25,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   -webkit-appearance: none;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -170,8 +176,9 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-}
-
-.gradient-overlay {
-  background: linear-gradient(135deg, rgba(79, 70, 229, 0.9) 0%, rgba(139, 92, 246, 0.85) 50%, rgba(236, 72, 153, 0.8) 100%);
+  filter: blur(4px);
+  transform: scale(1.5);
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
