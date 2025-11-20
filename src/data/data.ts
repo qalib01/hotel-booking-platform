@@ -68,7 +68,7 @@ export const boardTypes: IBoardType[] = [
 ];
 
 export const mealOptions: Record<string, IMealType> = {
-    Turkey: {
+    Türkiye: {
         dinner: [
             {
                 id: 1,
@@ -127,7 +127,8 @@ export const mealOptions: Record<string, IMealType> = {
                 price: 11
             },
         ],
-    }, Italy: {
+    },
+    Italy: {
         dinner: [
             {
                 id: 11,
