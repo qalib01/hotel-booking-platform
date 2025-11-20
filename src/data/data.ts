@@ -3,15 +3,18 @@ import { BoardType, Country, Hotel, MealType } from "../types/data.type";
 export const countries = [
     {
         id: 1,
-        name: "Turkey",
+        name: "Türkiye",
+        label: "turkiye",
     },
     {
         id: 2,
         name: "UAE",
+        label: "uae"
     },
     {
         id: 3,
         name: "Italy",
+        label: "italy"
     },
 ] as Country[];
 
