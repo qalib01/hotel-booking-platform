@@ -5,6 +5,7 @@ import { Hotel, MapPin, Sparkles, Users } from "lucide-react";
 import HotelFormCard from "../cards/hotelFormCard";
 import BookingStatCard from "../cards/bookingStatCard";
 import HotelListCard from "../cards/hotelListCard";
+import BookingSummaryCard from "../cards/bookingSummaryCard";
 
 
 const HeroSection = () => {
@@ -61,6 +62,8 @@ const HeroSection = () => {
                             <HotelFormCard />
                         ) : step === 2 ? (
                             <HotelListCard />
+                        ) : step === 3 ? (
+                            <BookingSummaryCard />
                         ) : (
                             <p>Basla</p>
                         )}

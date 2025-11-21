@@ -8,7 +8,7 @@ import { useMemo } from "react";
 
 
 const HotelFormCard = () => {
-    const { bookingData, setBookingData, setStep, setMealData } = useBooking();
+    const { bookingData, setBookingData, setStep } = useBooking();
     const isContinueBtnDisabled = !bookingData?.citizenship || !bookingData.checkIn || !bookingData.checkOut || !bookingData.destination || !bookingData.boardType;
     const today = new Date().toISOString().split('T')[0];
 

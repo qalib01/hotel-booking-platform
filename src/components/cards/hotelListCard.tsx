@@ -3,11 +3,13 @@
 import { hotels, mealOptions } from "@/src/data/data";
 import getDatesBetween from "@/src/helper/getDatesBetween";
 import { useBooking } from "@/src/store/booking.store";
-import { ChevronLeft, Handshake, Hotel } from "lucide-react";
+import cn from "classnames";
+import { BookMarked, ChevronLeft, Hotel } from "lucide-react";
 
 
 const HotelListCard = () => {
     const { bookingData, setBookingData, setStep, mealData, setMealData } = useBooking();
+    const isContinueBtnDisabled = !bookingData?.hotel;
 
     return (
         <div className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 border border-white/50 hover:shadow-purple-500/20 transition-all duration-500">
@@ -108,12 +110,18 @@ const HotelListCard = () => {
                     <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </button>
                 <button
-                    type="submit"
-                    className="w-full bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/50 flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer"
+                    type="button"
+                    onClick={() => setStep(3)}
+                    disabled={isContinueBtnDisabled}
+                    className={cn(
+                        'w-full text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer',
+                        { 'bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 hover:shadow-2xl hover:shadow-blue-500/50 hover:from-blue-700 hover:to-blue-600': !isContinueBtnDisabled },
+                        { 'bg-gray-500': isContinueBtnDisabled },
+                    )}
                 >
                     <span className="relative z-10 flex items-center gap-3">
-                        <Handshake className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        Complete
+                        <BookMarked className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        Checkout
                     </span>
                     <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </button>

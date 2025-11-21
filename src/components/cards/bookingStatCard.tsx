@@ -4,7 +4,6 @@ interface ComponentProp {
     icon: React.ElementType;
 }
 
-
 const BookingStatCard = ({ title, stat, icon: Icon }: ComponentProp) => {
     return (
         <div className="flex items-center gap-3">
