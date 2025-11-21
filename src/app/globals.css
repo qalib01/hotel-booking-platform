@@ -19,17 +19,17 @@
   }
 }
 
-input[type="date"]::-webkit-inner-spin-button,
+/* input[type="date"]::-webkit-inner-spin-button,
 input[type="date"]::-webkit-calendar-picker-indicator {
   display: none;
   -webkit-appearance: none;
-}
+} */
 
-input::-webkit-outer-spin-button,
+/* input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
-}
+} */
 
 @keyframes slideDown {
   from {
@@ -177,8 +177,7 @@ input::-webkit-inner-spin-button {
   background-position: center;
   background-attachment: fixed;
   filter: blur(4px);
-  transform: scale(1.5);
+  transform: scale(1.1);
   width: 100%;
-  height: 100vh;
   overflow: hidden;
 }

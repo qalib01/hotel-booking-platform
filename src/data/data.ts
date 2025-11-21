@@ -140,7 +140,8 @@ export const mealOptions: Record<string, IMealType> = {
                 name: "Italian Seafood Dinner",
                 price: 28
             }
-        ], lunch: [
+        ],
+        lunch: [
             {
                 id: 13,
                 name: "Pizza Margherita",

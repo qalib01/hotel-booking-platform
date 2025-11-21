@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "../components/layouts/header";
 import { Footer } from "../components/layouts/footer";
+import { Provider } from "react-redux";
+import { store } from "../store/redux.store";
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
