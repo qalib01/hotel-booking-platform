@@ -1,7 +1,7 @@
 "use client"
 
 import { mainMenuItems } from "@/src/data/map";
-import { ChevronRight, Globe, Hotel, Mail, Menu, Phone, User, X } from "lucide-react";
+import { ChevronRight, Globe, Hotel, Mail, Menu, Phone, X } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -77,7 +77,7 @@ export const Header = () => {
 
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className='lg:hidden p-2 rounded-lg transition-colors text-gray-700 hover:bg-gray-100'
+                            className='lg:hidden p-2 rounded-lg transition-colors text-gray-700'
                         >
                             {isMobileMenuOpen ? <X className="w-6 h-6" color="white" /> : <Menu className="w-6 h-6" color="white" />}
                         </button>
