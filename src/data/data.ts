@@ -100,7 +100,8 @@ export const mealOptions: Record<string, IMealType> = {
                 id: 6,
                 name: "Veggie Plate",
                 price: 9
-            }]
+            }
+        ]
     },
     UAE: {
         dinner: [

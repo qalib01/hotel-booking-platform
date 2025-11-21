@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IBookingConfigs } from "../types/booking.type";
-import { IMeal } from "../types/data.type";
+import { IBookingConfigs, MealData } from "../types/booking.type";
+
 
 const initialState = {
     bookingData: {
@@ -15,7 +15,7 @@ const initialState = {
     step: 1,
 } as {
     bookingData: IBookingConfigs | null;
-    mealData: IMeal | null,
+    mealData: MealData,
     step: number | null;
 };
 
@@ -26,8 +26,17 @@ const bookingSlice = createSlice({
         setBookingData: (state, action: PayloadAction<IBookingConfigs | null>) => {
             state.bookingData = action.payload;
         },
-        setMealData: (state, action: PayloadAction<IMeal | null>) => {
-            state.mealData = action.payload;
+        setMealData: (
+            state,
+            action: PayloadAction<{ date: string; mealType: 'lunch' | 'dinner'; value: number | null }>
+        ) => {
+            const { date, mealType, value } = action.payload;
+
+            if (!state.mealData[date]) {
+                state.mealData[date] = { lunch: null, dinner: null };
+            }
+
+            state.mealData[date][mealType] = value;
         },
         setStep: (state, action: PayloadAction<number | null>) => {
             state.step = action.payload;
@@ -37,6 +46,7 @@ const bookingSlice = createSlice({
 
 export const {
     setBookingData,
+    setMealData,
     setStep,
     // 
 } = bookingSlice.actions;

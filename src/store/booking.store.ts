@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState, AppDispatch } from "./redux.store";
-import { IBookingConfigs } from "../types/booking.type";
-import { setBookingData, setStep } from "../redux/booking.slice";
+import { IBookingConfigs, MealData } from "../types/booking.type";
+import { setBookingData, setMealData, setStep } from "../redux/booking.slice";
 
 
 export const useBooking = () => {
@@ -12,5 +12,7 @@ export const useBooking = () => {
         ...bookingState,
         setBookingData: (data: IBookingConfigs | null) => dispatch(setBookingData(data)),
         setStep: (data: number | null) => dispatch(setStep(data)),
+        setMealData: (data: { date: string; mealType: 'lunch' | 'dinner'; value: number | null }) => dispatch(setMealData(data)),
+        //
     }
 }

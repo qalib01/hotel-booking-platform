@@ -3,12 +3,12 @@
 import { countries } from "@/src/data/data";
 import { useBooking } from "@/src/store/booking.store";
 import cn from "classnames";
-import { BookImage, Calendar, ChevronRight, MapPin, Sparkles, Users } from "lucide-react";
+import { Calendar, ChevronRight, MapPin, Sparkles, Users } from "lucide-react";
 import { useMemo } from "react";
 
 
 const HotelFormCard = () => {
-    const { bookingData, setBookingData, setStep } = useBooking();
+    const { bookingData, setBookingData, setStep, setMealData } = useBooking();
     const isContinueBtnDisabled = !bookingData?.citizenship || !bookingData.checkIn || !bookingData.checkOut || !bookingData.destination || !bookingData.boardType;
     const today = new Date().toISOString().split('T')[0];
 

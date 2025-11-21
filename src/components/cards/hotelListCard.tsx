@@ -1,12 +1,13 @@
 "use client"
 
-import { hotels } from "@/src/data/data";
+import { hotels, mealOptions } from "@/src/data/data";
+import getDatesBetween from "@/src/helper/getDatesBetween";
 import { useBooking } from "@/src/store/booking.store";
-import { Hotel } from "lucide-react";
+import { ChevronLeft, Handshake, Hotel } from "lucide-react";
 
 
 const HotelListCard = () => {
-    const { bookingData, setBookingData } = useBooking();
+    const { bookingData, setBookingData, setStep, mealData, setMealData } = useBooking();
 
     return (
         <div className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 border border-white/50 hover:shadow-purple-500/20 transition-all duration-500">
@@ -36,7 +37,7 @@ const HotelListCard = () => {
                     </div>
                 )}
 
-                {bookingData?.hotel && (
+                {bookingData?.hotel && mealOptions[bookingData.destination || ''] && (
                     <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden animate-fadeInUp">
                         <div className="overflow-x-auto">
                             <table className="w-full">
@@ -47,72 +48,76 @@ const HotelListCard = () => {
                                         <th className="px-6 py-5 text-left text-sm font-bold text-white uppercase tracking-wider">Dinner</th>
                                     </tr>
                                 </thead>
-                                {/* <tbody className="divide-y divide-white/10">
-                            {dates.map((date, idx) => (
-                                <tr key={date} className="hover:bg-white/5 transition-colors duration-200">
-                                    <td className="px-6 py-5">
-                                        <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center font-bold text-white shadow-lg">
-                                                {idx + 1}
-                                            </div>
-                                            <div>
-                                                <div className="text-white font-semibold">Day {idx + 1}</div>
-                                                <div className="text-purple-200 text-sm">
-                                                    {new Date(date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                                <tbody className="divide-y divide-white/10">
+                                    {getDatesBetween(bookingData.checkIn || '', bookingData.checkOut || '').map((date, idx) => (
+                                        <tr key={idx} className="hover:bg-white/5 transition-colors duration-200">
+                                            <td className="px-6 py-5">
+                                                <div className="text-blue-900 text-sm">
+                                                    {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-5">
-                                        <select
-                                            value={dailyMeals[date]?.lunch || ''}
-                                            onChange={(e) => handleMealChange(date, 'lunch', e.target.value)}
-                                            disabled={formData.boardType === 'NB' || (formData.boardType === 'HB' && dailyMeals[date]?.dinner)}
-                                            className="w-full px-4 py-3 bg-white/90 backdrop-blur border-2 border-transparent rounded-xl text-gray-800 font-medium focus:ring-4 focus:ring-purple-500/50 focus:border-purple-400 disabled:bg-gray-400/20 disabled:cursor-not-allowed disabled:text-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
-                                        >
-                                            <option value="">No lunch</option>
-                                            {meals[formData.destination]?.lunch.map(meal => (
-                                                <option key={meal.id} value={meal.id}>
-                                                    {meal.name} (${meal.price})
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                    <td className="px-6 py-5">
-                                        <select
-                                            value={dailyMeals[date]?.dinner || ''}
-                                            onChange={(e) => handleMealChange(date, 'dinner', e.target.value)}
-                                            disabled={formData.boardType === 'NB' || (formData.boardType === 'HB' && dailyMeals[date]?.lunch)}
-                                            className="w-full px-4 py-3 bg-white/90 backdrop-blur border-2 border-transparent rounded-xl text-gray-800 font-medium focus:ring-4 focus:ring-pink-500/50 focus:border-pink-400 disabled:bg-gray-400/20 disabled:cursor-not-allowed disabled:text-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
-                                        >
-                                            <option value="">No dinner</option>
-                                            {meals[formData.destination]?.dinner.map(meal => (
-                                                <option key={meal.id} value={meal.id}>
-                                                    {meal.name} (${meal.price})
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody> */}
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                <select
+                                                    value={mealOptions[bookingData?.destination || ""]?.lunch?.find(m => m.id === mealData[date]?.lunch)?.id}
+                                                    onChange={(e) => setMealData({ date, mealType: 'lunch', value: Number(e.target.value) })}
+                                                    disabled={bookingData.boardType === 'NB' || bookingData.boardType === 'HB' && !!mealData?.[date]?.dinner}
+                                                    className="w-full px-4 py-3 bg-white/90 backdrop-blur border-2 border-transparent rounded-xl cursor-pointer text-gray-800 font-medium focus:ring-4 focus:ring-purple-500/50 focus:border-purple-400 disabled:bg-gray-400/20 disabled:cursor-not-allowed disabled:text-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
+                                                >
+                                                    <option value="">No lunch</option>
+                                                    {mealOptions[bookingData.destination || '']?.lunch.map(meal => (
+                                                        <option key={meal.id} value={meal.id}>
+                                                            {meal.name} (${meal.price})
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                            <td className="px-6 py-5">
+                                                <select
+                                                    value={mealOptions[bookingData?.destination || ""]?.dinner?.find(m => m.id === mealData[date]?.dinner)?.id}
+                                                    onChange={(e) => setMealData({ date, mealType: 'dinner', value: Number(e.target.value) })}
+                                                    disabled={bookingData.boardType === 'NB' || bookingData.boardType === 'HB' && !!mealData?.[date]?.lunch}
+                                                    className="w-full px-4 py-3 bg-white/90 backdrop-blur border-2 border-transparent rounded-xl cursor-pointer text-gray-800 font-medium focus:ring-4 focus:ring-purple-500/50 focus:border-purple-400 disabled:bg-gray-400/20 disabled:cursor-not-allowed disabled:text-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
+                                                >
+                                                    <option value="">No lunch</option>
+                                                    {mealOptions[bookingData.destination || '']?.dinner.map(meal => (
+                                                        <option key={meal.id} value={meal.id}>
+                                                            {meal.name} (${meal.price})
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 )}
             </div>
 
-
-            {/* <button
+            <div className="w-full flex gap-2 mt-4">
+                <button
+                    onClick={() => setStep(1)}
+                    type="button"
+                    className="w-full bg-gradient-to-br from-gray-600 to-gray-800 text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer"
+                >
+                    <span className="relative z-10 flex items-center gap-3">
+                        <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        Back
+                    </span>
+                    <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+                <button
                     type="submit"
                     className="w-full bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:shadow-blue-500/50 flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer"
                 >
                     <span className="relative z-10 flex items-center gap-3">
-                        <Search className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        Search Hotels
+                        <Handshake className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        Complete
                     </span>
                     <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button> */}
+                </button>
+            </div>
         </div>
     )
 }
