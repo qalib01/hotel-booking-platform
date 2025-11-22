@@ -19,7 +19,7 @@ export const countries: ICountry[] = [
 ];
 
 export const hotels: Record<string, IHotel[]> = {
-    Türkiye: [
+    1: [
         {
             id: 101,
             name: "Hilton Istanbul",
@@ -31,7 +31,7 @@ export const hotels: Record<string, IHotel[]> = {
             price: 90,
         },
     ],
-    UAE: [
+    2: [
         {
             id: 201,
             name: "Dubai Marina Hotel",
@@ -43,7 +43,7 @@ export const hotels: Record<string, IHotel[]> = {
             price: 300,
         },
     ],
-    Italy: [
+    3: [
         {
             id: 301,
             name: "Rome Center Hotel",
@@ -68,7 +68,7 @@ export const boardTypes: IBoardType[] = [
 ];
 
 export const mealOptions: Record<string, IMealType> = {
-    Türkiye: {
+    1: {
         dinner: [
             {
                 id: 1,
@@ -103,7 +103,7 @@ export const mealOptions: Record<string, IMealType> = {
             }
         ]
     },
-    UAE: {
+    2: {
         dinner: [
             {
                 id: 7,
@@ -129,7 +129,7 @@ export const mealOptions: Record<string, IMealType> = {
             },
         ],
     },
-    Italy: {
+    3: {
         dinner: [
             {
                 id: 11,

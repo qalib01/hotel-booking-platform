@@ -27,19 +27,19 @@ const HotelListCard = () => {
                         </label>
                         <select
                             value={bookingData?.hotel}
-                            onChange={(e) => setBookingData({ ...bookingData, hotel: e.target.value })}
+                            onChange={(e) => setBookingData({ ...bookingData, hotel: Number(e.target.value) })}
                             className="w-full px-4 outline-none py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium appearance-none cursor-pointer hover:border-blue-300"
                             required
                         >
                             <option value="">Select hotel</option>
                             {hotels[bookingData.destination].map(h => (
-                                <option key={h.id} value={h.name}>{h.name} - ${h.price}</option>
+                                <option key={h.id} value={h.id}>{h.name} - ${h.price}</option>
                             ))}
                         </select>
                     </div>
                 )}
 
-                {bookingData?.hotel && mealOptions[bookingData.destination || ''] && (
+                {bookingData?.hotel && mealOptions[bookingData.destination || ''] ? (
                     <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden animate-fadeInUp">
                         <div className="overflow-x-auto">
                             <table className="w-full">
@@ -80,7 +80,7 @@ const HotelListCard = () => {
                                                     disabled={bookingData.boardType === 'NB' || bookingData.boardType === 'HB' && !!mealData?.[date]?.lunch}
                                                     className="w-full px-4 py-3 bg-white/90 backdrop-blur border-2 border-transparent rounded-xl cursor-pointer text-gray-800 font-medium focus:ring-4 focus:ring-purple-500/50 focus:border-purple-400 disabled:bg-gray-400/20 disabled:cursor-not-allowed disabled:text-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
                                                 >
-                                                    <option value="">No lunch</option>
+                                                    <option value="">No dinner</option>
                                                     {mealOptions[bookingData.destination || '']?.dinner.map(meal => (
                                                         <option key={meal.id} value={meal.id}>
                                                             {meal.name} (${meal.price})
@@ -94,7 +94,7 @@ const HotelListCard = () => {
                             </table>
                         </div>
                     </div>
-                )}
+                ) : ''}
             </div>
 
             <div className="w-full flex gap-2 mt-4">

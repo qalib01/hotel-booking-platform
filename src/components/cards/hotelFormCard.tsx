@@ -1,6 +1,6 @@
 "use client"
 
-import { countries } from "@/src/data/data";
+import { countries, hotels } from "@/src/data/data";
 import { useBooking } from "@/src/store/booking.store";
 import cn from "classnames";
 import { Calendar, ChevronRight, MapPin, Sparkles, Users } from "lucide-react";
@@ -11,6 +11,7 @@ const HotelFormCard = () => {
     const { bookingData, setBookingData, setStep } = useBooking();
     const isContinueBtnDisabled = !bookingData?.citizenship || !bookingData.checkIn || !bookingData.checkOut || !bookingData.destination || !bookingData.boardType;
     const today = new Date().toISOString().split('T')[0];
+    console.log(bookingData?.destination)
 
     const { minCheckoutDate, maxCheckoutDate } = useMemo(() => {
         if (!bookingData?.checkIn) {
@@ -21,10 +22,8 @@ const HotelFormCard = () => {
         }
 
         const base = new Date(bookingData.checkIn);
-
         const min = new Date(base);
         min.setDate(min.getDate() + 2);
-
         const max = new Date(base);
         max.setDate(max.getDate() + 7);
 
@@ -49,13 +48,13 @@ const HotelFormCard = () => {
                     </label>
                     <select
                         value={bookingData?.citizenship}
-                        onChange={(e) => setBookingData({ ...bookingData, citizenship: e.target.value })}
+                        onChange={(e) => setBookingData({ ...bookingData, citizenship: Number(e.target.value) })}
                         className="w-full px-4 outline-none py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium appearance-none cursor-pointer hover:border-blue-300"
                         required
                     >
                         <option value="">Select country</option>
                         {countries.map(c => (
-                            <option key={c.id} value={c.name}>{c.name}</option>
+                            <option key={c.id} value={c.id}>{c.name}</option>
                         ))}
                     </select>
                 </div>
@@ -101,19 +100,19 @@ const HotelFormCard = () => {
                     </label>
                     <select
                         value={bookingData?.destination}
-                        onChange={(e) => setBookingData({ ...bookingData, destination: e.target.value })}
+                        onChange={(e) => setBookingData({ ...bookingData, destination: Number(e.target.value) })}
                         className="w-full px-4 outline-none py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium appearance-none cursor-pointer hover:border-blue-300"
                         required
                     >
                         <option value="">Select destination</option>
                         {countries.map(c => (
-                            <option key={c.id} value={c.name}>{c.name}</option>
+                            <option key={c.id} value={c.id}>{c.name}</option>
                         ))}
                     </select>
                 </div>
 
                 {
-                    bookingData?.destination && (
+                    !!bookingData?.destination && (
                         <div className="relative group">
                             <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
                                 <Sparkles className="w-4 h-4 text-blue-600" />

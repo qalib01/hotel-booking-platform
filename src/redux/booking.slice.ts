@@ -4,10 +4,10 @@ import { IBookingConfigs, MealData } from "../types/booking.type";
 
 const initialState = {
     bookingData: {
-        citizenship: '',
-        destination: '',
+        citizenship: 0,
+        destination: 0,
+        hotel: 0,
         checkIn: '',
-        hotel: '',
         checkOut: '',
         boardType: '',
     },

@@ -1,7 +1,7 @@
 export interface IBookingConfigs {
-    citizenship?: string;
-    destination?: string;
-    hotel?: string;
+    citizenship?: number;
+    destination?: number;
+    hotel?: number;
     checkIn?: string;
     checkOut?: string;
     numDays?: number;
