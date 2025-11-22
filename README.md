@@ -25,7 +25,7 @@ Follow these steps to run the project locally.
 
 1.  **Clone the repository:**
     ```bash
-    git clone [`https://github.com/qalib01/hotel-booking-platform.git`](https://github.com/qalib01/hotel-booking-platform.git)
+    git clone https://github.com/qalib01/hotel-booking-platform.git
     cd hotel-booking-platform
     ```
 
