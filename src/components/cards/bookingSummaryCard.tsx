@@ -3,15 +3,19 @@
 import { boardTypes, countries, hotels, mealOptions } from "@/src/data/data";
 import getDatesBetween from "@/src/helper/getDatesBetween";
 import { useBooking } from "@/src/store/booking.store";
-import { Calendar, Coins, Handshake, Hotel, MapPin, Sparkles, Users } from "lucide-react";
+import jsPDF from "jspdf";
+import { Calendar, Coins, Handshake, HardDriveDownload, Hotel, MapPin, Sparkles, Users } from "lucide-react";
+import { useState } from "react";
 
 
 const BookingSummaryCard = () => {
     const { bookingData, mealData } = useBooking();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isUploaded, setIsUploaded] = useState(false);
 
     const totalStay = getDatesBetween(bookingData?.checkIn || '', bookingData?.checkOut || '').length - 1;
-    const selectedCitizenship = countries[bookingData?.citizenship || 0];
-    const selectedDestination = countries[bookingData?.destination || 0];
+    const selectedCitizenship = countries.find(country => country.id === bookingData?.citizenship);
+    const selectedDestination = countries.find(country => country.id === bookingData?.destination);
     const selectedBoardType = boardTypes.find(type => type.code === bookingData?.boardType);
     const selectedHotel = hotels[bookingData?.destination || 0].find(hotel => hotel.id === Number(bookingData?.hotel));
 
@@ -36,6 +40,114 @@ const BookingSummaryCard = () => {
 
     const totalPrice = selectedHotel?.price! + selectedMealsTotal;
 
+    const handleComplete = async () => {
+        setIsLoading(true);
+
+        const finalBookingData = {
+            id: Date.now(),
+            createdAt: new Date().toISOString(),
+            customer: {
+                citizenship: selectedCitizenship?.name,
+                destination: selectedDestination?.name,
+            },
+            stayDetails: {
+                hotel: selectedHotel?.name,
+                boardType: selectedBoardType?.name,
+                checkIn: bookingData?.checkIn,
+                checkOut: bookingData?.checkOut,
+                totalNights: totalStay,
+            },
+            meals: mealData,
+            financial: {
+                totalPrice: totalPrice,
+                currency: "$"
+            }
+        };
+
+        try {
+            const response = await fetch('/api/create-reservation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(finalBookingData),
+            });
+
+            if (response.ok) {
+                alert('Rezervasiya uğurla tamamlandı!');
+                setIsUploaded(true);
+            } else {
+                alert('Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Server xətası.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const generatePDF = () => {
+        const doc = new jsPDF();
+
+        doc.setFontSize(40);
+        doc.setTextColor(0, 0, 60);
+        doc.text("HBS - Enjoy your stay", 20, 20);
+
+        doc.setFontSize(20);
+        doc.setTextColor(0, 0, 0);
+        doc.text("Booking Confirmation", 20, 30);
+
+        doc.setFontSize(10);
+        doc.text(`Date: ${new Date().toLocaleString()}`, 20, 40);
+        doc.text(`Booking ID: ${Date.now()}`, 20, 45);
+
+        doc.line(20, 50, 190, 50);
+
+        doc.setFontSize(14);
+        doc.text("Customer Information", 20, 60);
+        doc.setFontSize(12);
+        doc.text(`Citizenship: ${selectedCitizenship?.name}`, 20, 70);
+        doc.text(`Destination: ${selectedDestination?.name}`, 20, 80);
+
+        doc.setFontSize(14);
+        doc.text("Stay Details", 20, 100);
+        doc.setFontSize(12);
+        doc.text(`Hotel: ${selectedHotel?.name}`, 20, 110);
+        doc.text(`Board Type: ${selectedBoardType?.name}`, 20, 120);
+        doc.text(`Check-in: ${bookingData?.checkIn}`, 20, 130);
+        doc.text(`Check-out: ${bookingData?.checkOut}`, 20, 140);
+        doc.text(`Total Nights: ${totalStay}`, 20, 150);
+
+        doc.setFontSize(14);
+        doc.text("Meal Selection", 20, 170);
+        doc.setFontSize(10);
+
+        let yPos = 175;
+
+        if (Object.entries(mealData).length > 0) {
+             Object.entries(mealData).map(([date, meals]) => {
+                const text = `
+                    ${date}: Lunch (${selectedMealOption.lunch.find(l => l.id === meals.lunch)?.name || 'Not selected' || '-'}), Dinner (${selectedMealOption.dinner.find(l => l.id === meals.dinner)?.name || 'Not selected' || '-'})
+                `;
+                doc.text(text, 10, yPos);
+                yPos += 7;
+            });
+        } else {
+            doc.text("No meals selected", 20, yPos);
+            yPos += 10;
+        }
+
+        yPos += 10;
+        doc.line(20, yPos, 200, yPos);
+        yPos += 10;
+        doc.setFontSize(16);
+        doc.setTextColor(0, 0, 255);
+        doc.text(`Total Price: $${totalPrice}`, 20, yPos + 10);
+
+        doc.save(`booking-${Date.now()}.pdf`);
+    };
+
     return (
         <div className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 border border-white/50 hover:shadow-purple-500/20 transition-all duration-500">
             <div className="mb-8">
@@ -49,7 +161,7 @@ const BookingSummaryCard = () => {
                         <Users className="w-5 h-5 text-blue-600" />
                         Citizenship:
                     </div>
-                    <p className="text-lg font-semibold text-gray-700"> {selectedCitizenship.name} </p>
+                    <p className="text-lg font-semibold text-gray-700"> {selectedCitizenship?.name} </p>
                 </div>
                 <div className="flex items-center gap-3">
                     <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
@@ -107,17 +219,34 @@ const BookingSummaryCard = () => {
                 </div>
             </div>
 
-            <button
-                type="button"
-                // onClick={() => setStep(3)}
-                className='w-full mt-4 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 hover:shadow-2xl hover:shadow-blue-500/50 hover:from-blue-700 hover:to-blue-600 text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer'
-            >
-                <span className="relative z-10 flex items-center gap-3">
-                    <Handshake className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                    Complete
-                </span>
-                <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            </button>
+            <div className="w-full flex gap-2 mt-4">
+                {isUploaded && (
+                    <button
+                        type="button"
+                        onClick={generatePDF}
+                        disabled={isLoading}
+                        className='w-full mt-4 bg-gradient-to-br from-gray-600 to-gray-800 hover:shadow-2xl hover:shadow-gray-500/50 hover:from-gray-700 hover:to-gray-600 text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer'
+                    >
+                        <span className="relative z-10 flex items-center gap-3">
+                            <HardDriveDownload className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                            Download
+                        </span>
+                        <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </button>
+                )}
+                <button
+                    type="button"
+                    onClick={handleComplete}
+                    disabled={isLoading}
+                    className='w-full mt-4 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 hover:shadow-2xl hover:shadow-blue-500/50 hover:from-blue-700 hover:to-blue-600 text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer'
+                >
+                    <span className="relative z-10 flex items-center gap-3">
+                        <Handshake className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                        Complete
+                    </span>
+                    <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                </button>
+            </div>
         </div>
     )
 }
