@@ -5,6 +5,7 @@ import getDatesBetween from "@/src/helper/getDatesBetween";
 import { useBooking } from "@/src/store/booking.store";
 import cn from "classnames";
 import { BookMarked, ChevronLeft, Hotel } from "lucide-react";
+import ActionButton from "../ui/button";
 
 
 const HotelListCard = () => {
@@ -98,7 +99,7 @@ const HotelListCard = () => {
             </div>
 
             <div className="w-full flex gap-2 mt-4">
-                <button
+                {/* <button
                     onClick={() => setStep(1)}
                     type="button"
                     className="w-full bg-gradient-to-br from-gray-600 to-gray-800 text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer"
@@ -108,8 +109,23 @@ const HotelListCard = () => {
                         Back
                     </span>
                     <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button>
-                <button
+                </button> */}
+                <ActionButton
+                    label="Back"
+                    onClick={() => setStep(1)}
+                    type="button"
+                    icon={ChevronLeft}
+                    baseColor="gray"
+                />
+                <ActionButton
+                    label="Checkout"
+                    onClick={() => setStep(3)}
+                    type="button"
+                    icon={BookMarked}
+                    baseColor="blue"
+                    isLoading={isContinueBtnDisabled}
+                />
+                {/* <button
                     type="button"
                     onClick={() => setStep(3)}
                     disabled={isContinueBtnDisabled}
@@ -124,7 +140,7 @@ const HotelListCard = () => {
                         Checkout
                     </span>
                     <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button>
+                </button> */}
             </div>
         </div>
     )
