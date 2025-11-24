@@ -4,9 +4,10 @@ import { boardTypes, countries, hotels, mealOptions } from "@/src/data/data";
 import getDatesBetween from "@/src/helper/getDatesBetween";
 import { useBooking } from "@/src/store/booking.store";
 import jsPDF from "jspdf";
-import { Calendar, Coins, Handshake, HardDriveDownload, Hotel, MapPin, Sparkles, Users } from "lucide-react";
+import { Calendar, Coins, Handshake, HardDriveDownload, Hotel, MapPin, Sparkles, Users, Utensils } from "lucide-react";
 import { useState } from "react";
 import ActionButton from "../ui/button";
+import SummaryItem from "../ui/summaryitem";
 
 
 const BookingSummaryCard = () => {
@@ -74,9 +75,9 @@ const BookingSummaryCard = () => {
                 body: JSON.stringify(finalBookingData),
             });
 
+            setIsUploaded(true);
             if (response.ok) {
                 alert('Rezervasiya uğurla tamamlandı!');
-                setIsUploaded(true);
             } else {
                 alert('Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.');
             }
@@ -157,67 +158,54 @@ const BookingSummaryCard = () => {
             </div>
 
             <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                        <Users className="w-5 h-5 text-blue-600" />
-                        Citizenship:
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700"> {selectedCitizenship?.name} </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                        <Calendar className="w-5 h-5 text-blue-600" />
-                        Dates:
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700"> {bookingData?.checkIn}/{bookingData?.checkOut} (Total: {totalStay}) </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                        <MapPin className="w-5 h-5 text-blue-600" />
-                        Destination:
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700"> {selectedDestination?.name} </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                        <Sparkles className="w-5 h-5 text-blue-600" />
-                        Board type:
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700"> {selectedBoardType?.name} </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                        <Hotel className="w-5 h-5 text-blue-600" />
-                        Hotel:
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700"> {selectedHotel?.name} </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                        <Hotel className="w-5 h-5 text-blue-600" />
-                        Meals:
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700">
-                        {Object.entries(mealData).length > 0 ? Object.entries(mealData).map(([date, meals]) => {
-                            return (
-                                <span key={date} className="block">
-                                    <span className="text-blue-900">{date} —{" "}</span>
-                                    Lunch ({selectedMealOption.lunch.find(l => l.id === meals.lunch)?.name || 'Not selected'}){", "}
-                                    Dinner ({selectedMealOption.dinner.find(l => l.id === meals.dinner)?.name || 'Not selected'}){" "}
-                                </span>
-                            );
-                        }) : 'No meal selection'}
-                    </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2 text-lg font-semibold text-gray-700">
-                        <Coins className="w-5 h-5 text-blue-600" />
-                        Price:
-                    </div>
-                    <p className="text-lg font-semibold text-gray-700">
-                        ${totalPrice}
-                    </p>
-                </div>
+                <SummaryItem
+                    icon={Users}
+                    title="Citizenship"
+                    value={selectedCitizenship?.name}
+                />
+                <SummaryItem
+                    icon={Calendar}
+                    title="Dates"
+                    value={`${bookingData?.checkIn}/${bookingData?.checkOut} (Total: ${totalStay})`}
+                />
+                <SummaryItem
+                    icon={MapPin}
+                    title="Destination"
+                    value={selectedDestination?.name}
+                />
+                <SummaryItem
+                    icon={Sparkles}
+                    title="Board type"
+                    value={selectedBoardType?.name}
+                />
+                <SummaryItem
+                    icon={Hotel}
+                    title="Hotel"
+                    value={selectedHotel?.name}
+                />
+                <SummaryItem
+                    icon={Utensils}
+                    title="Meals"
+                >
+                    {Object.entries(mealData).length > 0 ? Object.entries(mealData).map(([date, meals]) => {
+                        return (
+                            <span key={date} className="block">
+                                <span className="text-blue-900">{date} —{" "}</span>
+                                Lunch ({selectedMealOption.lunch.find(l => l.id === meals.lunch)?.name || 'Not selected'}){", "}
+                                Dinner ({selectedMealOption.dinner.find(l => l.id === meals.dinner)?.name || 'Not selected'}){" "}
+                            </span>
+                        );
+                    }) : 'No meal selection'}
+                </SummaryItem>
+                <SummaryItem
+                    icon={Coins}
+                    title="Price"
+                    value={`$${totalPrice}`}
+                />
+                <p className="text-red-500 text-sm">
+                    <span className="font-bold">Important Note: </span>
+                    In Vercel or Netlify hosts Complete button can be return an error. For now, in any situation you can download your booking summary as pdf.
+                </p>
             </div>
 
             <div className="w-full flex gap-2 mt-4">

@@ -233,22 +233,6 @@ const HotelFormCard = () => {
                     baseColor="blue"
                     disabled={isContinueBtnDisabled}
                 />
-
-                {/* <button
-                    onClick={() => setStep(2)}
-                    disabled={isContinueBtnDisabled}
-                    className={cn(
-                        'w-full text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer',
-                        { 'bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 hover:shadow-2xl hover:shadow-blue-500/50 hover:from-blue-700 hover:to-blue-600': !isContinueBtnDisabled },
-                        { 'bg-gray-500': isContinueBtnDisabled },
-                    )}
-                >
-                    <span className="relative z-10 flex items-center gap-3">
-                        Continue to Meal Selection
-                        <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                    <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button> */}
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200">

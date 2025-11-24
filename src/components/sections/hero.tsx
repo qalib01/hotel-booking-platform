@@ -3,7 +3,7 @@
 import { useBooking } from "@/src/store/booking.store";
 import { Hotel, MapPin, Sparkles, Users } from "lucide-react";
 import HotelFormCard from "../cards/hotelFormCard";
-import BookingStatCard from "../cards/bookingStatCard";
+import BookingStatCard from "../ui/bookingStatCard";
 import HotelListCard from "../cards/hotelListCard";
 import BookingSummaryCard from "../cards/bookingSummaryCard";
 
@@ -42,13 +42,11 @@ const HeroSection = () => {
                                 stat="5+"
                                 icon={Hotel}
                             />
-
                             <BookingStatCard
                                 title="Destinations"
                                 stat="3+"
                                 icon={MapPin}
                             />
-
                             <BookingStatCard
                                 title="Happy Guests"
                                 stat="10+"
@@ -58,16 +56,13 @@ const HeroSection = () => {
                     </div>
 
                     <div className="animate-scaleIn stagger-4">
-                        {step === 1 ? (
-                            <HotelFormCard />
+                        {step === 3 ? (
+                            <BookingSummaryCard />
                         ) : step === 2 ? (
                             <HotelListCard />
-                        ) : step === 3 ? (
-                            <BookingSummaryCard />
                         ) : (
-                            <p>Basla</p>
+                            <HotelFormCard />
                         )}
-                        
                     </div>
 
                 </div>
