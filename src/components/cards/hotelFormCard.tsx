@@ -3,11 +3,11 @@
 import { boardTypes, countries } from "@/src/data/data";
 import { useBooking } from "@/src/store/booking.store";
 import { Calendar, ChevronRight, MapPin, Sparkles, Users } from "lucide-react";
-import { useMemo } from "react";
 import ActionButton from "../ui/button";
 import Select from "../ui/select";
 import Input from "../ui/input";
 import Radio from "../ui/radio";
+import getCheckDateLimits from "@/src/helper/getCheckDateLimits";
 
 
 const HotelFormCard = () => {
@@ -15,25 +15,7 @@ const HotelFormCard = () => {
     const isContinueBtnDisabled = !bookingData?.citizenship || !bookingData.checkIn || !bookingData.checkOut || !bookingData.destination || !bookingData.boardType;
     const today = new Date().toISOString().split('T')[0];
 
-    const { minCheckoutDate, maxCheckoutDate } = useMemo(() => {
-        if (!bookingData?.checkIn) {
-            return {
-                minCheckoutDate: '',
-                maxCheckoutDate: ''
-            };
-        }
-
-        const base = new Date(bookingData.checkIn);
-        const min = new Date(base);
-        min.setDate(min.getDate() + 2);
-        const max = new Date(base);
-        max.setDate(max.getDate() + 7);
-
-        return {
-            minCheckoutDate: min.toISOString().split("T")[0],
-            maxCheckoutDate: max.toISOString().split("T")[0],
-        };
-    }, [bookingData?.checkIn]);
+    const { minCheckoutDate, maxCheckoutDate } = getCheckDateLimits(bookingData?.checkIn);
 
     return (
         <div className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl p-8 border border-white/50 hover:shadow-purple-500/20 transition-all duration-500">
