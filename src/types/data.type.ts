@@ -13,6 +13,7 @@ export interface IHotel {
 export interface IBoardType {
     code: string;
     name: string;
+    description?: string;
 };
 
 export interface IMeal {

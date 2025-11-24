@@ -3,9 +3,9 @@
 import { hotels, mealOptions } from "@/src/data/data";
 import getDatesBetween from "@/src/helper/getDatesBetween";
 import { useBooking } from "@/src/store/booking.store";
-import cn from "classnames";
 import { BookMarked, ChevronLeft, Hotel } from "lucide-react";
 import ActionButton from "../ui/button";
+import Select from "../ui/select";
 
 
 const HotelListCard = () => {
@@ -20,25 +20,14 @@ const HotelListCard = () => {
             </div>
 
             <div className="space-y-6">
-                {bookingData?.destination && (
-                    <div className="relative group">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                            <Hotel className="w-4 h-4 text-blue-600" />
-                            Hotels
-                        </label>
-                        <select
-                            value={bookingData?.hotel}
-                            onChange={(e) => setBookingData({ ...bookingData, hotel: Number(e.target.value) })}
-                            className="w-full px-4 outline-none py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium appearance-none cursor-pointer hover:border-blue-300"
-                            required
-                        >
-                            <option value="">Select hotel</option>
-                            {hotels[bookingData.destination].map(h => (
-                                <option key={h.id} value={h.id}>{h.name} - ${h.price}</option>
-                            ))}
-                        </select>
-                    </div>
-                )}
+                <Select
+                    icon={Hotel}
+                    title="Hotel"
+                    value={bookingData?.hotel}
+                    onChange={(e) => setBookingData({ ...bookingData, hotel: Number(e.target.value) })}
+                    options={hotels[bookingData?.destination || '']}
+                    isConditional={!bookingData?.destination}
+                />
 
                 {bookingData?.hotel && mealOptions[bookingData.destination || ''] ? (
                     <div className="bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20 shadow-2xl overflow-hidden animate-fadeInUp">
@@ -47,47 +36,35 @@ const HotelListCard = () => {
                                 <thead>
                                     <tr className="bg-blue-900">
                                         <th className="px-6 py-5 text-left text-sm font-bold text-white uppercase tracking-wider">Date</th>
-                                        <th className="px-6 py-5 text-left text-sm font-bold text-white uppercase tracking-wider">Lunch</th>
-                                        <th className="px-6 py-5 text-left text-sm font-bold text-white uppercase tracking-wider">Dinner</th>
+                                        <th className="px-6 py-5 text-left text-sm font-bold text-white uppercase tracking-wider w-1/2">Lunch</th>
+                                        <th className="px-6 py-5 text-left text-sm font-bold text-white uppercase tracking-wider w-1/2">Dinner</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-white/10">
+                                <tbody className="divide-y divide-white/10 w-full">
                                     {getDatesBetween(bookingData.checkIn || '', bookingData.checkOut || '').map((date, idx) => (
-                                        <tr key={idx} className="hover:bg-white/5 transition-colors duration-200">
-                                            <td className="px-6 py-5">
+                                        <tr key={idx} className="hover:bg-white/5 transition-colors duration-200 w-full">
+                                            <td className="px-6 py-5 col-4">
                                                 <div className="text-blue-900 text-sm">
                                                     {new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-5">
-                                                <select
+                                            <td className="px-4 py-3 col-4">
+                                                <Select
                                                     value={mealOptions[bookingData?.destination || ""]?.lunch?.find(m => m.id === mealData[date]?.lunch)?.id}
                                                     onChange={(e) => setMealData({ date, mealType: 'lunch', value: Number(e.target.value) })}
-                                                    disabled={bookingData.boardType === 'NB' || bookingData.boardType === 'HB' && !!mealData?.[date]?.dinner}
-                                                    className="w-full px-4 py-3 bg-white/90 backdrop-blur border-2 border-transparent rounded-xl cursor-pointer text-gray-800 font-medium focus:ring-4 focus:ring-purple-500/50 focus:border-purple-400 disabled:bg-gray-400/20 disabled:cursor-not-allowed disabled:text-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
-                                                >
-                                                    <option value="">No lunch</option>
-                                                    {mealOptions[bookingData.destination || '']?.lunch.map(meal => (
-                                                        <option key={meal.id} value={meal.id}>
-                                                            {meal.name} (${meal.price})
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                    isDisabled={bookingData.boardType === 'NB' || bookingData.boardType === 'HB' && !!mealData?.[date]?.dinner}
+                                                    options={mealOptions[bookingData.destination || '']?.lunch}
+                                                    selectOption="Lunch"
+                                                />
                                             </td>
-                                            <td className="px-6 py-5">
-                                                <select
+                                            <td className="px-4 py-3 col-4">
+                                                <Select
                                                     value={mealOptions[bookingData?.destination || ""]?.dinner?.find(m => m.id === mealData[date]?.dinner)?.id}
                                                     onChange={(e) => setMealData({ date, mealType: 'dinner', value: Number(e.target.value) })}
-                                                    disabled={bookingData.boardType === 'NB' || bookingData.boardType === 'HB' && !!mealData?.[date]?.lunch}
-                                                    className="w-full px-4 py-3 bg-white/90 backdrop-blur border-2 border-transparent rounded-xl cursor-pointer text-gray-800 font-medium focus:ring-4 focus:ring-purple-500/50 focus:border-purple-400 disabled:bg-gray-400/20 disabled:cursor-not-allowed disabled:text-gray-500 transition-all duration-300 shadow-lg hover:shadow-xl"
-                                                >
-                                                    <option value="">No dinner</option>
-                                                    {mealOptions[bookingData.destination || '']?.dinner.map(meal => (
-                                                        <option key={meal.id} value={meal.id}>
-                                                            {meal.name} (${meal.price})
-                                                        </option>
-                                                    ))}
-                                                </select>
+                                                    isDisabled={bookingData.boardType === 'NB' || bookingData.boardType === 'HB' && !!mealData?.[date]?.lunch}
+                                                    options={mealOptions[bookingData.destination || '']?.dinner}
+                                                    selectOption="Dinner"
+                                                />
                                             </td>
                                         </tr>
                                     ))}

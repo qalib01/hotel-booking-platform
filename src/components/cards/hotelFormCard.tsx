@@ -1,11 +1,13 @@
 "use client"
 
-import { countries, hotels } from "@/src/data/data";
+import { boardTypes, countries } from "@/src/data/data";
 import { useBooking } from "@/src/store/booking.store";
-import cn from "classnames";
 import { Calendar, ChevronRight, MapPin, Sparkles, Users } from "lucide-react";
 import { useMemo } from "react";
 import ActionButton from "../ui/button";
+import Select from "../ui/select";
+import Input from "../ui/input";
+import Radio from "../ui/radio";
 
 
 const HotelFormCard = () => {
@@ -41,75 +43,43 @@ const HotelFormCard = () => {
             </div>
 
             <div className="space-y-6">
-                <div className="relative group">
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                        <Users className="w-4 h-4 text-blue-600" />
-                        Citizenship
-                    </label>
-                    <select
-                        value={bookingData?.citizenship}
-                        onChange={(e) => setBookingData({ ...bookingData, citizenship: Number(e.target.value) })}
-                        className="w-full px-4 outline-none py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium appearance-none cursor-pointer hover:border-blue-300"
-                        required
-                    >
-                        <option value="">Select country</option>
-                        {countries.map(c => (
-                            <option key={c.id} value={c.id}>{c.name}</option>
-                        ))}
-                    </select>
-                </div>
+                <Select
+                    icon={Users}
+                    title="Citizenship"
+                    value={bookingData?.citizenship}
+                    onChange={(e) => setBookingData({ ...bookingData, citizenship: Number(e.target.value) })}
+                    options={countries}
+                />
 
                 <div className="grid grid-cols-2 gap-4">
-                    <div className="relative group">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                            <Calendar className="w-4 h-4 text-blue-600" />
-                            Check-in
-                        </label>
-                        <input
-                            type="date"
-                            min={today}
-                            value={bookingData?.checkIn}
-                            onChange={(e) => setBookingData({ ...bookingData, checkIn: e.target.value })}
-                            className="w-full px-4 outline-none py-3.5 bg-gray-50 cursor-pointer border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium hover:border-blue-300"
-                            required
-                        />
-                    </div>
+                    <Input
+                        icon={Calendar}
+                        label="Check-in"
+                        type="date"
+                        value={bookingData?.checkIn}
+                        onChange={(e) => setBookingData({ ...bookingData, checkIn: e.target.value })}
+                        min={today}
+                    />
 
-                    <div className="relative group">
-                        <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                            <Calendar className="w-4 h-4 text-blue-600" />
-                            Check-out
-                        </label>
-                        <input
-                            type="date"
-                            value={bookingData?.checkOut}
-                            disabled={!bookingData?.checkIn}
-                            onChange={(e) => setBookingData({ ...bookingData, checkOut: e.target.value })}
-                            min={minCheckoutDate}
-                            max={maxCheckoutDate}
-                            className="w-full px-4 py-3.5 outline-none bg-gray-50 cursor-pointer border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium hover:border-blue-300"
-                            required
-                        />
-                    </div>
+                    <Input
+                        icon={Calendar}
+                        label="Check-out"
+                        type="date"
+                        value={bookingData?.checkOut}
+                        isDisabled={!bookingData?.checkIn}
+                        onChange={(e) => setBookingData({ ...bookingData, checkOut: e.target.value })}
+                        min={minCheckoutDate}
+                        max={maxCheckoutDate}
+                    />
                 </div>
 
-                <div className="relative group">
-                    <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                        <MapPin className="w-4 h-4 text-blue-600" />
-                        Destination
-                    </label>
-                    <select
-                        value={bookingData?.destination}
-                        onChange={(e) => setBookingData({ ...bookingData, destination: Number(e.target.value) })}
-                        className="w-full px-4 outline-none py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-gray-800 font-medium appearance-none cursor-pointer hover:border-blue-300"
-                        required
-                    >
-                        <option value="">Select destination</option>
-                        {countries.map(c => (
-                            <option key={c.id} value={c.id}>{c.name}</option>
-                        ))}
-                    </select>
-                </div>
+                <Select
+                    icon={MapPin}
+                    title="Destination"
+                    value={bookingData?.destination}
+                    onChange={(e) => setBookingData({ ...bookingData, destination: Number(e.target.value) })}
+                    options={countries}
+                />
 
                 {
                     !!bookingData?.destination && (
@@ -119,107 +89,16 @@ const HotelFormCard = () => {
                                 Board type
                             </label>
                             <div className="grid grid-cols-1 gap-3">
-                                <label className={cn(
-                                    "flex items-center justify-between px-4 py-3.5 bg-gray-50 border-2 rounded-xl cursor-pointer transition-all duration-300",
-                                    {
-                                        "border-blue-500 bg-blue-50 shadow-md": bookingData.boardType === "FB",
-                                        "border-gray-200 hover:border-blue-300": bookingData.boardType !== "FB",
-                                    },
-                                )}>
-                                    <div className="flex items-center gap-3">
-                                        <div className={cn(
-                                            "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300",
-                                            {
-                                                "border-blue-500 bg-blue-500": bookingData.boardType === 'FB',
-                                                "border-gray-300": bookingData.boardType !== 'FB',
-                                            })}
-                                        >
-                                            {bookingData.boardType === 'FB' && (
-                                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                                            )}
-                                        </div>
-                                        <input
-                                            type="radio"
-                                            name="boardType"
-                                            value="FB"
-                                            checked={bookingData.boardType === 'FB'}
-                                            onChange={(e) => setBookingData({ ...bookingData, boardType: e.target.value })}
-                                            className="hidden"
-                                        />
-                                        <div>
-                                            <span className="font-semibold text-gray-800">Full Board</span>
-                                            <p className="text-xs text-gray-600">Breakfast, Lunch & Dinner</p>
-                                        </div>
-                                    </div>
-                                </label>
-
-                                <label className={cn(
-                                    "flex items-center justify-between px-4 py-3.5 bg-gray-50 border-2 rounded-xl cursor-pointer transition-all duration-300",
-                                    {
-                                        "border-blue-500 bg-blue-50 shadow-md": bookingData.boardType === "HB",
-                                        "border-gray-200 hover:border-blue-300": bookingData.boardType !== "HB",
-                                    },
-                                )}>
-                                    <div className="flex items-center gap-3">
-                                        <div className={cn(
-                                            "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300",
-                                            {
-                                                "border-blue-500 bg-blue-500": bookingData.boardType === "HB",
-                                                "border-gray-300": bookingData.boardType !== "HB",
-                                            })}
-                                        >
-                                            {bookingData.boardType === 'HB' && (
-                                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                                            )}
-                                        </div>
-                                        <input
-                                            type="radio"
-                                            name="boardType"
-                                            value="HB"
-                                            checked={bookingData.boardType === 'HB'}
-                                            onChange={(e) => setBookingData({ ...bookingData, boardType: e.target.value })}
-                                            className="hidden"
-                                        />
-                                        <div>
-                                            <span className="font-semibold text-gray-800">Half Board</span>
-                                            <p className="text-xs text-gray-600">Breakfast & One Meal</p>
-                                        </div>
-                                    </div>
-                                </label>
-
-                                <label className={cn(
-                                    "flex items-center justify-between px-4 py-3.5 bg-gray-50 border-2 rounded-xl cursor-pointer transition-all duration-300",
-                                    {
-                                        "border-blue-500 bg-blue-50 shadow-md": bookingData.boardType === "NB",
-                                        "border-gray-200 hover:border-blue-300": bookingData.boardType !== "NB",
-                                    },
-                                )}>
-                                    <div className="flex items-center gap-3">
-                                        <div className={cn(
-                                            "w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300",
-                                            {
-                                                "border-blue-500 bg-blue-500": bookingData.boardType === "NB",
-                                                "border-gray-300": bookingData.boardType !== "NB",
-                                            })}
-                                        >
-                                            {bookingData.boardType === 'NB' && (
-                                                <div className="w-2 h-2 bg-white rounded-full"></div>
-                                            )}
-                                        </div>
-                                        <input
-                                            type="radio"
-                                            name="boardType"
-                                            value="NB"
-                                            checked={bookingData.boardType === 'NB'}
-                                            onChange={(e) => setBookingData({ ...bookingData, boardType: e.target.value })}
-                                            className="hidden"
-                                        />
-                                        <div>
-                                            <span className="font-semibold text-gray-800">No Board</span>
-                                            <p className="text-xs text-gray-600">No Meals Included</p>
-                                        </div>
-                                    </div>
-                                </label>
+                                {boardTypes.map(type => (
+                                    <Radio
+                                        name="boardType"
+                                        value={type.code}
+                                        isChecked={bookingData.boardType === type.code}
+                                        onChange={(e) => setBookingData({ ...bookingData, boardType: e.target.value })}
+                                        title={type.name}
+                                        description={type.description}
+                                    />
+                                ))}
                             </div>
                         </div>
                     )

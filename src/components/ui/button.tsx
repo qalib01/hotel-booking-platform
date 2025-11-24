@@ -11,7 +11,7 @@ interface Prop {
     isLoading?: boolean;
     disabled?: boolean;
     baseColor?: 'gray' | 'blue';
-    icon?: React.ElementType,
+    icon?: React.ElementType;
     isConditional?: boolean;
 }
 
@@ -52,7 +52,6 @@ const ActionButton = ({
     const currentColors = colorClasses[disabled ? 'gray' : baseColor];
     const gradientClass = `bg-gradient-to-br ${currentColors.from} ${currentColors.to} ${currentColors.via ? currentColors.via : ''}`;
     const hoverClass = `${currentColors.hoverFrom} ${currentColors.hoverTo} ${currentColors.shadow}`;
-    console.log(isConditional)
 
     const buttonElement = (
         <button
