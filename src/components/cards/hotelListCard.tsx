@@ -99,17 +99,6 @@ const HotelListCard = () => {
             </div>
 
             <div className="w-full flex gap-2 mt-4">
-                {/* <button
-                    onClick={() => setStep(1)}
-                    type="button"
-                    className="w-full bg-gradient-to-br from-gray-600 to-gray-800 text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer"
-                >
-                    <span className="relative z-10 flex items-center gap-3">
-                        <ChevronLeft className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        Back
-                    </span>
-                    <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button> */}
                 <ActionButton
                     label="Back"
                     onClick={() => setStep(1)}
@@ -123,24 +112,8 @@ const HotelListCard = () => {
                     type="button"
                     icon={BookMarked}
                     baseColor="blue"
-                    isLoading={isContinueBtnDisabled}
-                />
-                {/* <button
-                    type="button"
-                    onClick={() => setStep(3)}
                     disabled={isContinueBtnDisabled}
-                    className={cn(
-                        'w-full text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer',
-                        { 'bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 hover:shadow-2xl hover:shadow-blue-500/50 hover:from-blue-700 hover:to-blue-600': !isContinueBtnDisabled },
-                        { 'bg-gray-500': isContinueBtnDisabled },
-                    )}
-                >
-                    <span className="relative z-10 flex items-center gap-3">
-                        <BookMarked className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        Checkout
-                    </span>
-                    <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button> */}
+                />
             </div>
         </div>
     )

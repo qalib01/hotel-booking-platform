@@ -5,6 +5,7 @@ import { useBooking } from "@/src/store/booking.store";
 import cn from "classnames";
 import { Calendar, ChevronRight, MapPin, Sparkles, Users } from "lucide-react";
 import { useMemo } from "react";
+import ActionButton from "../ui/button";
 
 
 const HotelFormCard = () => {
@@ -224,7 +225,16 @@ const HotelFormCard = () => {
                     )
                 }
 
-                <button
+                <ActionButton
+                    label="Continue to Meal Selection"
+                    onClick={() => setStep(2)}
+                    type="button"
+                    icon={ChevronRight}
+                    baseColor="blue"
+                    disabled={isContinueBtnDisabled}
+                />
+
+                {/* <button
                     onClick={() => setStep(2)}
                     disabled={isContinueBtnDisabled}
                     className={cn(
@@ -238,7 +248,7 @@ const HotelFormCard = () => {
                         <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                     </span>
                     <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button>
+                </button> */}
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200">

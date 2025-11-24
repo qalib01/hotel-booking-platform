@@ -49,17 +49,10 @@ const ActionButton = ({
         hoverTo: string;
         shadow: string;
     }>;
-
-    const currentColors = colorClasses[baseColor];
+    const currentColors = colorClasses[disabled ? 'gray' : baseColor];
     const gradientClass = `bg-gradient-to-br ${currentColors.from} ${currentColors.to} ${currentColors.via ? currentColors.via : ''}`;
     const hoverClass = `${currentColors.hoverFrom} ${currentColors.hoverTo} ${currentColors.shadow}`;
-
-    const defaultClasses = cn(
-        'w-full mt-4 hover:shadow-2xl text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer',
-        { 'from-gray-400 to-gray-500 cursor-not-allowed': disabled },
-        {'cursor-not-allowed': isLoading},
-        {gradientClass: !disabled}
-    );
+    console.log(isConditional)
 
     const buttonElement = (
         <button
@@ -67,7 +60,11 @@ const ActionButton = ({
             onClick={onClick}
             disabled={disabled || isLoading}
             className={cn(
-                gradientClass, hoverClass, defaultClasses
+                'w-full mt-4 hover:shadow-2xl text-white py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl flex items-center justify-center gap-3 group relative overflow-hidden',
+                { 'from-gray-400 to-gray-500 cursor-not-allowed': disabled },
+                { 'cursor-not-allowed': isLoading },
+                { 'cursor-pointer': !disabled },
+                gradientClass, hoverClass
             )}
         >
             <span className="relative z-10 flex items-center gap-3">
@@ -78,8 +75,8 @@ const ActionButton = ({
         </button>
     );
 
-    if (isConditional === false) {
-        return buttonElement;
+    if (isConditional) {
+        return null;
     }
 
     return buttonElement;

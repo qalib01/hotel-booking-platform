@@ -6,6 +6,7 @@ import { useBooking } from "@/src/store/booking.store";
 import jsPDF from "jspdf";
 import { Calendar, Coins, Handshake, HardDriveDownload, Hotel, MapPin, Sparkles, Users } from "lucide-react";
 import { useState } from "react";
+import ActionButton from "../ui/button";
 
 
 const BookingSummaryCard = () => {
@@ -126,7 +127,7 @@ const BookingSummaryCard = () => {
         let yPos = 175;
 
         if (Object.entries(mealData).length > 0) {
-             Object.entries(mealData).map(([date, meals]) => {
+            Object.entries(mealData).map(([date, meals]) => {
                 const text = `
                     ${date}: Lunch (${selectedMealOption.lunch.find(l => l.id === meals.lunch)?.name || 'Not selected' || '-'}), Dinner (${selectedMealOption.dinner.find(l => l.id === meals.dinner)?.name || 'Not selected' || '-'})
                 `;
@@ -220,32 +221,23 @@ const BookingSummaryCard = () => {
             </div>
 
             <div className="w-full flex gap-2 mt-4">
-                {isUploaded && (
-                    <button
-                        type="button"
-                        onClick={generatePDF}
-                        disabled={isLoading}
-                        className='w-full mt-4 bg-gradient-to-br from-gray-600 to-gray-800 hover:shadow-2xl hover:shadow-gray-500/50 hover:from-gray-700 hover:to-gray-600 text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer'
-                    >
-                        <span className="relative z-10 flex items-center gap-3">
-                            <HardDriveDownload className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                            Download
-                        </span>
-                        <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </button>
-                )}
-                <button
+                <ActionButton
+                    label="Download"
+                    onClick={generatePDF}
                     type="button"
-                    onClick={handleComplete}
+                    icon={HardDriveDownload}
+                    baseColor="gray"
                     disabled={isLoading}
-                    className='w-full mt-4 bg-gradient-to-br from-blue-600 via-blue-500 to-blue-800 hover:shadow-2xl hover:shadow-blue-500/50 hover:from-blue-700 hover:to-blue-600 text-white py-4 rounded-xl font-bold text-lg disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed transition-all duration-300 shadow-xl  flex items-center justify-center gap-3 group relative overflow-hidden cursor-pointer'
-                >
-                    <span className="relative z-10 flex items-center gap-3">
-                        <Handshake className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                        Complete
-                    </span>
-                    <div className="absolute inset-0 animate-shimmer opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                </button>
+                    isConditional={!isUploaded}
+                />
+                <ActionButton
+                    label="Complete"
+                    onClick={handleComplete}
+                    type="button"
+                    icon={Handshake}
+                    baseColor="blue"
+                    isLoading={isLoading}
+                />
             </div>
         </div>
     )
